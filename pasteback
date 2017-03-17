@@ -16,14 +16,14 @@ if [ ! -z "$2" ]; then
   if [ -f "$FILE" ]; then
     read -p "$FILE exists. Overwrite file? (Y) " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-      curl -s $URL | awk '/<td class="code"><div class="paste">/{f=1;next} /<\/div>/{f=0} f' > $FILE
+    curl -s $URL | awk '/<td class="code"><div class="paste">/{f=1;split($3,val,"<pre>"); s = val[2] " "; for (i = 4; i<= NF ; i++) s = s $i " "; printf s "\n" ; next} /<\/div>/{f=0} f' > $FILE
     else 
       echo "Exiting"; exit 1;
     fi
   else 	
-    curl -s $URL | awk '/<td class="code"><div class="paste">/{f=1;next} /<\/div>/{f=0} f' > $FILE
+    curl -s $URL | awk '/<td class="code"><div class="paste">/{f=1;split($3,val,"<pre>"); s = val[2] " "; for (i = 4; i<= NF ; i++) s = s $i " "; printf s "\n" ; next} /<\/div>/{f=0} f' > $FILE
   fi
   echo "Contents of $1 have been stored in $FILE"
 else
-  curl -s $URL | awk '/<td class="code"><div class="paste">/{f=1;next} /<\/div>/{f=0} f'
+    curl -s $URL | awk '/<td class="code"><div class="paste">/{f=1;split($3,val,"<pre>"); s = val[2] " "; for (i = 4; i<= NF ; i++) s = s $i " "; printf s "\n" ; next} /<\/div>/{f=0} f'
 fi
